@@ -15,6 +15,7 @@ import {
   getNextPendingTodoTool,
   updateTodoStatusTool,
 } from "./tools/planner/todo-actions";
+import { writeMemoryTool } from "./tools/memory/write-memory";
 
 export const tools = {
   write_file: writeFileTool,
@@ -36,4 +37,6 @@ export const tools = {
   updateTodoStatusTool,
   getNextPendingTodoTool,
   checkIfAllTodosAreCompletedTool,
+
+  write_memory: writeMemoryTool
 } satisfies ToolSet;
