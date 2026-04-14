@@ -1,18 +1,33 @@
 import { ToolLoopAgent } from "ai";
 import { tools } from "./tools-registry";
 import { hasReviewComment } from "./utils/agent-utils";
-import { selectModel } from "./utils/select-model";
-import { google } from "@ai-sdk/google";
 import { openrouter } from "@openrouter/ai-sdk-provider";
+import { loadMemory } from "./utils/load-memory";
 
 // const { chatModel, modelId } = await selectModel();
 
 // console.debug("using model:", modelId);
 
+const memory = await loadMemory()
+
 export const codingAgent = new ToolLoopAgent({
   model: openrouter.chat("openrouter/free"),
   instructions: `
-You're a coding agent. You have access to the following tools:
+You're a coding agent. 
+
+This is the current Memory:
+USER MEMORY
+${memory.user}
+
+PROJECT MEMORY
+${memory.project}
+
+AGENT MEMORY
+${memory.agent}
+
+--------------------------------------------------
+
+You have access to the following tools:
 
 FILE TOOLS
 - write_file
