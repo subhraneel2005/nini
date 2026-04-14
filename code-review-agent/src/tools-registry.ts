@@ -16,6 +16,7 @@ import {
   updateTodoStatusTool,
 } from "./tools/planner/todo-actions";
 import { writeMemoryTool } from "./tools/memory/write-memory";
+import { runCommandTool } from "./tools/run-commands";
 
 export const tools = {
   write_file: writeFileTool,
@@ -29,14 +30,13 @@ export const tools = {
 
   git_tool: gitTool,
 
-  // sub-agents
-//   generate_plan_and_todos: generatePlanAndTodosTool,
-
   createTodoTool,
   createAllTodosTool,
   updateTodoStatusTool,
   getNextPendingTodoTool,
   checkIfAllTodosAreCompletedTool,
 
-  write_memory: writeMemoryTool
+  write_memory: writeMemoryTool,
+  run_command: runCommandTool
+
 } satisfies ToolSet;

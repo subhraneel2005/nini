@@ -342,6 +342,35 @@ export const WriteMemoryInputSchema = z.object({
     ),
 });
 
+export const LANG = [
+  "node",
+  "python",
+  "go",
+  "java",
+  "rust",
+  "unknown",
+] as const;
+
+export const RunCommandSchema = z.object({
+  command: z
+    .string()
+    .describe(
+      "The executable or program to run. Examples: 'npm', 'pnpm', 'yarn', 'python', 'pip', 'uvicorn', 'go', 'cargo', 'java', 'node'. This should be the base command without arguments.",
+    ),
+  args: z
+    .array(z.string())
+    .optional()
+    .describe(
+      "Arguments passed to the command. Each argument should be a separate string. Example: ['run','dev'] for 'npm run dev'. Do not include the main command here.",
+    ),
+  cwd: z
+    .string()
+    .optional()
+    .describe(
+      "Working directory where the command should run. Use when the project is inside a subfolder (common in monorepos). Example: './frontend', './apps/web', './backend'. If omitted, the command runs in the repository root.",
+    ),
+});
+
 export type WriteFileProps = z.infer<typeof WriteFileSchema>;
 export type ReadFileProps = z.infer<typeof ReadFileSchema>;
 export type ReadFileResults = z.infer<typeof ReadFileResultSchema>;
@@ -360,3 +389,6 @@ export type Todos = z.infer<typeof TodosSchema>;
 export type SingleTodo = z.infer<typeof SingleTodoSchema>;
 export type UpdateTodoStatus = z.infer<typeof UpdateTodoStatusSchema>;
 export type WriteMemory = z.infer<typeof WriteMemoryInputSchema>;
+export type Lang = (typeof LANG)[number];
+export type RunCommandInput = z.infer<typeof RunCommandSchema>;
+

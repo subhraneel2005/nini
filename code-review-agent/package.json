@@ -6,7 +6,8 @@
   "scripts": {
     "agent": "bun src/scripts/run-agent.tsx",
     "ffm": "bun src/utils/fetch-free-models.ts",
-    "test": "bun test"
+    "test": "bun test",
+    "build": "bun run build"
   },
   "devDependencies": {
     "@types/bun": "latest",
