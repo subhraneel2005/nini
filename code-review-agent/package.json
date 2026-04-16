@@ -24,6 +24,7 @@
     "@openrouter/ai-sdk-provider": "^2.2.3",
     "ai": "^6.0.105",
     "chat": "^4.15.0",
+    "cheerio": "^1.2.0",
     "chromadb": "^3.3.1",
     "colors": "^1.4.0",
     "diff": "^8.0.3",

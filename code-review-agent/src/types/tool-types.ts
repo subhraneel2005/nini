@@ -1,3 +1,4 @@
+import { input } from "@inquirer/prompts";
 import z from "zod";
 
 export const WriteFileSchema = z.object({
@@ -376,6 +377,21 @@ export const WebSearchInputSchema = z.object({
   searchQuery: z.string().describe("The search query that needs to be searched in the web.")
 })
 
+export const WebFetchInputSchema = z.object({
+  url: z.httpUrl().describe("A valid HTTP/HTTPS url that needs to be fetched")
+})
+
+export const WebFetchOutputSchema = z.union([
+  z.object({
+    success: z.literal(true),
+    response: z.string().describe("This is the valid response came after fetching the url")
+  }),
+  z.object({
+    success: z.literal(false),
+    error: z.string().describe("This is the invalid response or error message that came after the fetching of the url failed.")
+  }),
+])
+
 export type WriteFileProps = z.infer<typeof WriteFileSchema>;
 export type ReadFileProps = z.infer<typeof ReadFileSchema>;
 export type ReadFileResults = z.infer<typeof ReadFileResultSchema>;
@@ -397,3 +413,6 @@ export type WriteMemory = z.infer<typeof WriteMemoryInputSchema>;
 export type Lang = (typeof LANG)[number];
 export type RunCommandInput = z.infer<typeof RunCommandSchema>;
 export type WebSearchInput = z.infer<typeof WebSearchInputSchema>;
+export type WebFetchInput = z.infer<typeof WebFetchInputSchema>;
+export type WebFetchOutput = z.infer<typeof WebFetchOutputSchema>;
+
