@@ -5,7 +5,7 @@ import os from "node:os";
 
 const HOME_DIR = os.homedir();
 
-export function getGlobalConfigPath() {
+export async function getGlobalConfigPath() {
   return path.join(HOME_DIR, ".config", "nini", "config.json");
 }
 

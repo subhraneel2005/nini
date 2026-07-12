@@ -21,17 +21,17 @@ export async function createGlobalConfig() {
     },
   };
 
-  await fs.mkdir(path.dirname(getGlobalConfigPath()), {
+  await fs.mkdir(path.dirname(await getGlobalConfigPath()), {
     recursive: true,
   });
 
-  await fs.writeFile(getGlobalConfigPath(), JSON.stringify(config, null, 2));
+  await fs.writeFile(await getGlobalConfigPath(), JSON.stringify(config, null, 2));
 
   return config;
 }
 
 export async function updateGlobalConfig(config: GlobalAgentConfigType) {
-  await fs.writeFile(getGlobalConfigPath(), JSON.stringify(config, null, 2));
+  await fs.writeFile(await getGlobalConfigPath(), JSON.stringify(config, null, 2));
 }
 
 export async function setApiKey(

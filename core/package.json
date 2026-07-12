@@ -5,7 +5,7 @@
   "type": "module",
   "private": false,
   "bin": {
-    "my-agent": "./src/scripts/run-agent.tsx"
+    "nini": "./src/cli.ts"
   },
   "scripts": {
     "agent": "bun src/scripts/run-agent.tsx",
@@ -31,6 +31,7 @@
     "cheerio": "^1.2.0",
     "chromadb": "^3.3.1",
     "colors": "^1.4.0",
+    "commander": "^15.0.0",
     "diff": "^8.0.3",
     "exa-js": "^2.11.0",
     "glob": "^13.0.6",

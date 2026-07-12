@@ -8,7 +8,7 @@ import { readProjectConfig } from "./reads";
 import fs from "node:fs/promises";
 import path from "node:path";
 
-export function getProjectHash(projectPath: string) {
+export async function getProjectHash(projectPath: string) {
   return crypto
     .createHash("sha256")
     .update(projectPath)
@@ -16,9 +16,9 @@ export function getProjectHash(projectPath: string) {
     .slice(0, 6);
 }
 
-const projectHash = getProjectHash(process.cwd());
 
 export async function createSession() {
+  const projectHash = await getProjectHash(process.cwd());
   const sessionId = crypto.randomUUID();
   const { defaultModel, defaultProvider } = await readProjectConfig();
 
@@ -33,7 +33,7 @@ export async function createSession() {
     updatedAt: new Date().toISOString(),
   };
 
-  const sessionPath = getSessionConfigPath(projectHash, sessionId);
+  const sessionPath = await getSessionConfigPath(projectHash, sessionId);
 
   await fs.mkdir(path.dirname(sessionPath), {
     recursive: true,
@@ -47,7 +47,7 @@ export async function createSession() {
 export async function getLatestSession(
   projectHash: string,
 ): Promise<SessionConfigType | null> {
-  const sessionDirPath = getSessionsDirPath(projectHash);
+  const sessionDirPath = await getSessionsDirPath(projectHash);
   const allFiles = await fs.readdir(sessionDirPath);
 
   let latestFile = allFiles[0];
@@ -76,7 +76,7 @@ export async function updateSession(session: SessionConfigType) {
     session.updatedAt = new Date().toISOString();
   
     await fs.writeFile(
-      getSessionConfigPath(session.projectHash, session.id),
+      await getSessionConfigPath(session.projectHash, session.id),
       JSON.stringify(session, null, 2)
     );
   }

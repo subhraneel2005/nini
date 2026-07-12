@@ -19,7 +19,7 @@ import {
 } from "./paths";
 
 export async function readGlobalConfig(): Promise<GlobalAgentConfigType> {
-  const raw = await fs.readFile(getGlobalConfigPath(), "utf8");
+  const raw = await fs.readFile(await getGlobalConfigPath(), "utf8");
   return GlobalAgentConfig.parse(JSON.parse(raw));
 }
 
