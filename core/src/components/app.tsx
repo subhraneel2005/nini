@@ -1,104 +1,90 @@
-import React, { useEffect, useState } from "react";
-import { Box, Text } from "ink";
-import TextInput from "ink-text-input";
-import Thinking from "./thinking";
-import { ToolLoopAgent } from "ai";
-import { selectModel } from "../utils/select-model";
-import { tools } from "../tools-registry";
-import { hasReviewComment } from "../utils/agent-utils";
-
-function createCodingAgent(chatModel: Awaited<ReturnType<typeof selectModel>>["chatModel"]) {
-  return new ToolLoopAgent({
-    model: chatModel,
-    instructions: `
-You're a helpful coding agent.
-Always finish with "ANSWER:".
-`,
-    tools,
-    stopWhen: hasReviewComment,
-  });
-}
+import React, { useState, useCallback } from 'react'
+import { Box, Text } from 'ink'
+import Chat from './Chat.js'
+import Input from './Input.js'
+import ToolExecution from './ToolExecution.js'
+import ToolLog from './ToolLog.js'
+import DiffViewer from './DiffViewer.js'
+import ApprovalPrompt from './ApprovalPrompt.js'
 
 export default function App() {
-  const [value, setValue] = useState("");
-  const [thinking, setThinking] = useState<string[]>([]);
-  const [answer, setAnswer] = useState("");
-  const [running, setRunning] = useState(false);
-  const [agent, setAgent] = useState<ReturnType<typeof createCodingAgent> | null>(null);
+  const [input, setInput] = useState('')
+  const [messages, setMessages] = useState<{ id: string; role: 'user' | 'assistant'; content: string }[]>([
+    { id: '1', role: 'assistant', content: 'Hello! How can I help you?' },
+  ])
+  const [toolStatus, setToolStatus] = useState<'running' | 'completed' | 'failed'>('completed')
+  const [showApproval, setShowApproval] = useState(false)
 
-  useEffect(() => {
-    async function init() {
-      const { chatModel, modelId } = await selectModel();
-      console.log("using model:", modelId);
-
-      setAgent(createCodingAgent(chatModel));
-    }
-
-    init();
-  }, []);
-
-  const runAgent = async (query: string) => {
-    if (!agent) return;
-
-    setRunning(true);
-    setThinking([]);
-    setAnswer("");
-
-    const result = await agent.stream({
-      prompt: query,
-    });
-
-    let buffer = "";
-
-    for await (const chunk of result.fullStream) {
-      switch (chunk.type) {
-        case "reasoning-delta":
-          buffer += chunk.text ?? "";
-
-          if (buffer.includes("\n")) {
-            const lines = buffer.split("\n");
-            buffer = lines.pop() ?? "";
-            setThinking((prev) => [...prev, ...lines]);
-          }
-          break;
-
-        case "text-delta":
-          setAnswer((prev) => prev + chunk.text);
-          break;
-      }
-    }
-
-    setRunning(false);
-  };
-
-  const handleSubmit = async (val: string) => {
-    setValue("");
-    await runAgent(val);
-  };
+  const onSubmit = useCallback((value: string) => {
+    setMessages(prev => [
+      ...prev,
+      { id: String(Date.now()), role: 'user', content: value },
+      { id: String(Date.now() + 1), role: 'assistant', content: `You said: "${value}"` },
+    ])
+    setInput('')
+    setToolStatus('completed')
+  }, [])
 
   return (
-    <Box flexDirection="column">
-      <Text bold>AI Coding Agent</Text>
+    <Box flexDirection="column" height="100%">
+      <Box flexGrow={1} flexDirection="column" padding={1}>
+        <Chat messages={messages} />
 
-      <Box marginTop={1} flexDirection="column">
-        <Text>Enter prompt:</Text>
-        <Box borderStyle="round" borderColor="whiteBright" borderDimColor>
-          <TextInput
-            value={value}
-            onChange={setValue}
-            onSubmit={handleSubmit}
-            placeholder="Type your prompt..."
+        <Box marginY={1}>
+          <ToolExecution
+            toolName="read-file"
+            status={toolStatus}
+            duration={toolStatus === 'completed' ? 142 : undefined}
           />
         </Box>
+
+        <Box marginY={1}>
+          <ToolLog
+            title="read-file output"
+            logs={[
+              "import { render, Box, Text } from 'ink'",
+              '',
+              '// Example component',
+            ]}
+          />
+        </Box>
+
+        <Box marginY={1}>
+          <DiffViewer
+            filePath="src/components/Input.tsx"
+            diff={[
+            '--- a/src/Input.tsx',
+            '+++ b/src/Input.tsx',
+            '@@ -1,5 +1,8 @@',
+            '-const x = 1',
+            '+const x = 2',
+            ' function foo() {',
+            '-  return x',
+            '+  return x + 1',
+            ' }',
+          ].join('\n')}
+          />
+        </Box>
+
+        {showApproval && (
+          <Box marginY={1}>
+            <ApprovalPrompt
+              message="Allow tool to read /etc/passwd?"
+              onConfirm={() => setShowApproval(false)}
+              onReject={() => setShowApproval(false)}
+            />
+          </Box>
+        )}
       </Box>
 
-      {running && thinking.length > 0 && <Thinking thinking={thinking} />}
-
-      {answer && (
-        <Box marginTop={1}>
-          <Text>{answer}</Text>
-        </Box>
-      )}
+      <Box borderStyle="single" paddingX={1} paddingY={0}>
+        <Input
+          value={input}
+          onChange={setInput}
+          onSubmit={onSubmit}
+          placeholder="Type your message..."
+        />
+      </Box>
     </Box>
-  );
+  )
 }
