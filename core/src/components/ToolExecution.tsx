@@ -15,13 +15,12 @@ const icons: Record<string, string> = {
 
 export default function ToolExecution({ toolName, status, duration }: ToolExecutionProps) {
   const icon = icons[status] ?? '…'
-  const dim = status === 'running'
   return (
     <Box>
-      <Text bold={!dim} dimColor={dim}>
+      <Text color="#8a94a6" dimColor>
         {icon} {toolName}
       </Text>
-      {duration !== undefined && <Text dimColor> ({duration}ms)</Text>}
+      {duration !== undefined && <Text color="#8a94a6" dimColor> ({duration}ms)</Text>}
     </Box>
   )
 }

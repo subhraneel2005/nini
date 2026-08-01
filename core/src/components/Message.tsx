@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box, Text } from 'ink'
+import Markdown from './Markdown.js'
 
 interface MessageProps {
   role: "assistant" | "system" | "tool" | "user"
@@ -7,12 +8,17 @@ interface MessageProps {
 }
 
 export default function Message({ role, content }: MessageProps) {
+  const rendersMarkdown = role === 'assistant' || role === 'system'
   return (
     <Box flexDirection="column" marginBottom={1}>
       <Text bold>
         {role.toUpperCase()}
       </Text>
-      <Text>{content}</Text>
+      {rendersMarkdown ? (
+        <Markdown>{content}</Markdown>
+      ) : (
+        <Text>{content}</Text>
+      )}
     </Box>
   )
 }

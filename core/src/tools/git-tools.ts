@@ -55,11 +55,8 @@ async function gitToolFunc({ command, commitMessage, title, body }: GitCommandIn
       throw new Error("Unsupported git command");
   }
   try {
-    console.log("running git command: ", cmd)
     const {stdout, stderr} = await execAsync(cmd)
 
-    if(stderr) console.warn("git command stderr: ", stderr)
-    
     return stderr || {stdout, message: "command executed successfully"}
   } catch (error: any) {
     const message =

@@ -12,7 +12,7 @@ async function webSearch({ searchQuery }: WebSearchInput) {
         }
     })
 
-    console.log(results)
+    return results
   } catch (error) {
     console.error("error at webSearch", error)
   }

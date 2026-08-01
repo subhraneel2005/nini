@@ -1,34 +1,36 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
 import { Box, Text } from 'ink'
 import Chat from './Chat.js'
-import Input from './Input.js'
 import ToolExecution from './ToolExecution.js'
 import ToolLog from './ToolLog.js'
 import DiffViewer from './DiffViewer.js'
 import ApprovalPrompt from './ApprovalPrompt.js'
+import { ProviderEnum } from '../types/config-types.js'
+import type { SessionConfigType } from '../types/config-types.js'
+
+const fakeSession: SessionConfigType = {
+  id: 'preview',
+  projectHash: 'preview',
+  provider: ProviderEnum.openrouter,
+  model: 'openrouter/free',
+  tokenUsed: 0,
+  messages: [],
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+}
+
+const initMessages = [
+  { id: 1, role: 'assistant' as const, content: 'Hello! How can I help you?' },
+]
 
 export default function App() {
-  const [input, setInput] = useState('')
-  const [messages, setMessages] = useState<{ id: string; role: 'user' | 'assistant'; content: string }[]>([
-    { id: '1', role: 'assistant', content: 'Hello! How can I help you?' },
-  ])
   const [toolStatus, setToolStatus] = useState<'running' | 'completed' | 'failed'>('completed')
   const [showApproval, setShowApproval] = useState(false)
-
-  const onSubmit = useCallback((value: string) => {
-    setMessages(prev => [
-      ...prev,
-      { id: String(Date.now()), role: 'user', content: value },
-      { id: String(Date.now() + 1), role: 'assistant', content: `You said: "${value}"` },
-    ])
-    setInput('')
-    setToolStatus('completed')
-  }, [])
 
   return (
     <Box flexDirection="column" height="100%">
       <Box flexGrow={1} flexDirection="column" padding={1}>
-        <Chat messages={messages} />
+        <Chat initMessages={initMessages} session={fakeSession} />
 
         <Box marginY={1}>
           <ToolExecution
@@ -75,15 +77,6 @@ export default function App() {
             />
           </Box>
         )}
-      </Box>
-
-      <Box borderStyle="single" paddingX={1} paddingY={0}>
-        <Input
-          value={input}
-          onChange={setInput}
-          onSubmit={onSubmit}
-          placeholder="Type your message..."
-        />
       </Box>
     </Box>
   )

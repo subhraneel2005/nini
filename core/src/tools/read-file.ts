@@ -36,7 +36,6 @@ async function readFile({ folder, filename }: ReadFileProps): Promise<ReadFileRe
 
     } catch (error: any) {
         if (error.code === "ENOENT") {
-            console.error("File does not exist")
             return { success: false, error: "File does not exist" }
         }
         console.error("Error at tool: read_file: " + error)

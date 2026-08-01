@@ -7,7 +7,6 @@ async function webFetch({ url }: WebFetchInput): Promise<WebFetchOutput> {
     const res = await fetch(url);
     if (!res.ok) {
       const errorText = await res.text();
-      console.log("url error: ", errorText);
       
       return {
         success: false,
@@ -21,8 +20,6 @@ async function webFetch({ url }: WebFetchInput): Promise<WebFetchOutput> {
     $("script, style, nav, footer, header").remove();
 
     const cleanedText = $("main").text() || $("article").text() || $("body").text();
-
-    console.log("url success response: ", cleanedText);
 
     return {
       success: true,

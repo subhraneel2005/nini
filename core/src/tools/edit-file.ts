@@ -66,10 +66,6 @@ export async function editFile({ filename, folder, newStr, oldStr, isApproved }:
 
     await fs.writeFile(filePath, newFileContent)
 
-
-    process.stderr.write(`\n${additionsCount} additions`)
-    process.stderr.write(`\n${deletionsCount} deletions\n`)
-
     return {
         success: true,
         path: filePath,

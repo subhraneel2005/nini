@@ -1,6 +1,6 @@
 import { render } from "ink";
 import { getProjectHash, getLatestSession, createSession } from "../service-logics/session-config";
-import Chat from "../components/Chat"
+import Chat from "../components/Chat.js"
 import React from "react";
 
 export async function chatCommand() {
@@ -16,9 +16,6 @@ export async function chatCommand() {
     role: m.role,
     content: m.content
   }))
-
-  console.log("RESUMING SESSION: ", session.id);
-  console.log(JSON.stringify(session, null, 2));
 
   render(
     React.createElement(Chat, {

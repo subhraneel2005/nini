@@ -16,7 +16,6 @@ export async function writeFileWithContent({ filename, fileContent, folder }: Wr
     try {
         await fs.mkdir(basePath, { recursive: true })
         await fs.writeFile(filePath, fileContent)
-        console.debug("file created: " + filePath)
 
         return { sucess: true, path: filePath }
     } catch (error) {
@@ -38,8 +37,6 @@ export async function appendToFile({ filename, fileContent, folder }: WriteFileP
         await fs.mkdir(basePath, { recursive: true })
 
         await fs.appendFile(filePath, fileContent + "\n")
-
-        console.debug("content appended: " + filePath)
 
         return { success: true, path: filePath }
 

@@ -1,4 +1,4 @@
 {
-  "defaultProvider": "openai",
+  "defaultProvider": "openrouter",
   "defaultModel": "openrouter/free"
 }

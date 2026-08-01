@@ -12,8 +12,6 @@ async function ls({ propPath, all }: LsInput): Promise<LsOutput> {
       files = files.filter((f: string) => !f.startsWith("."));
     }
 
-    console.log("directory files: ", "\n", files.join("\n"));
-
     return {
         success: true,
         files: files.join("\n")
