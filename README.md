@@ -1,4 +1,4 @@
-<img width="1600" height="900" alt="Untitled design (34)" src="https://github.com/user-attachments/assets/8f3a14be-b58e-4bfd-8d94-4bc3162b70cb" />
+<img width="1600" height="542" alt="Untitled design (34) (1)" src="https://github.com/user-attachments/assets/b5ab6787-bbdd-418c-917d-db002a5ae00d" />
 
 <div align="center">
 
