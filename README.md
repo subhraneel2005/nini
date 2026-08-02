@@ -1,9 +1,8 @@
-
-<img width="2184" height="686" alt="banner" src="https://github.com/user-attachments/assets/35519a96-861b-4107-b7ce-7ea48a185014" />
+<img width="1600" height="900" alt="Untitled design (34)" src="https://github.com/user-attachments/assets/8f3a14be-b58e-4bfd-8d94-4bc3162b70cb" />
 
 <div align="center">
 
-# AI Terminal Coding Agent (Building my Own Claude Code)
+# Tiny AI Coding Agent 
 
 <p>
   <a href="https://github.com/subhraneel2005/sidequests">
